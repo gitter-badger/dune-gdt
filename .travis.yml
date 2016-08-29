@@ -66,8 +66,13 @@ install:
   - cp -ra ${TRAVIS_BUILD_DIR} .
 
 before_script:
+    - free -h
     - df -h
-    - $HOME/src/.travis/add_swap.sh
+    - ${SUPERDIR}/.travis/add_swap.sh
+    - free -h
+    - df -h
+    - sync && echo "echo 3 > /proc/sys/vm/drop_caches" | sudo -E sh
+    - free -h
     - df -h
     - ${SRC_DCTRL} ${BLD} --only=${MY_MODULE} configure
     - if [[ "x${TESTS}" != "xheadercheck" ]]; then ${SRC_DCTRL} ${BLD} --only=${MY_MODULE} make; fi
